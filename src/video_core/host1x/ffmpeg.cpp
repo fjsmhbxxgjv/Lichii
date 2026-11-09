@@ -46,9 +46,9 @@ constexpr std::array PreferredGpuDecoders = {
 #elif defined(__ANDROID__)
     AV_HWDEVICE_TYPE_MEDIACODEC,
 #elif defined(__unix__)
-    AV_HWDEVICE_TYPE_CUDA,
     AV_HWDEVICE_TYPE_VAAPI,
     AV_HWDEVICE_TYPE_VDPAU,
+    AV_HWDEVICE_TYPE_CUDA,
 #endif
     AV_HWDEVICE_TYPE_VULKAN,
 };
@@ -301,9 +301,10 @@ DecoderContext::~DecoderContext() {
 }
 
 void DecoderContext::InitializeHardwareDecoder(const HardwareContext& context,
-                                               [[maybe_unused]] AVPixelFormat hw_pix_fmt) {
+                                               AVPixelFormat hw_pix_fmt) {
     m_codec_context->hw_device_ctx = av_buffer_ref(context.GetBufferRef());
     m_codec_context->get_format = GetGpuFormat;
+    m_codec_context->pix_fmt = hw_pix_fmt;
 }
 
 bool DecoderContext::OpenContext(const Decoder& decoder, std::span<const u8> extradata) {

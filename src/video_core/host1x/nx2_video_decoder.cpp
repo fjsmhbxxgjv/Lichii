@@ -126,7 +126,7 @@ struct Nx2VideoDecoder::Impl {
             AVCodecContext* codec_context = context->GetCodecContext();
             codec_context->flags &= ~AV_CODEC_FLAG_LOW_DELAY;
             codec_context->thread_type = FF_THREAD_FRAME | FF_THREAD_SLICE;
-            codec_context->thread_count = 4;
+            codec_context->thread_count = 0; // auto: use all available cores
         }
         return context->OpenContext(*decoder);
     }
